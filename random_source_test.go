@@ -3,13 +3,12 @@ package faker
 import (
 	cryptorand "crypto/rand"
 	"io"
-	mathrand "math/rand"
+	mathrand "pgregory.net/rand"
 	"testing"
-	"time"
 )
 
 func TestSetRandomSource(t *testing.T) {
-	SetRandomSource(NewSafeSource(mathrand.NewSource(time.Now().UnixNano())))
+	SetRandomSource(mathrand.New())
 
 	_ = rand.Int31n(100)
 }
