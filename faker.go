@@ -6,7 +6,7 @@ import (
 	cryptorand "crypto/rand"
 	"errors"
 	"fmt"
-	mathrand "math/rand"
+	mathrand "pgregory.net/rand"
 	"reflect"
 	"regexp"
 	"strconv"
@@ -239,7 +239,7 @@ var (
 )
 
 func init() {
-	rand = mathrand.New(NewSafeSource(mathrand.NewSource(time.Now().UnixNano())))
+	rand = mathrand.New()
 	crypto = cryptorand.Reader
 }
 
@@ -1194,7 +1194,7 @@ func randomString(n int, fakerOpt options.Options) (string, error) {
 		randRune := rune(rand.Intn(int(fakerOpt.StringLanguage.End-fakerOpt.StringLanguage.Start)) + int(fakerOpt.StringLanguage.Start))
 		for slice.ContainsRune(set, randRune) {
 			if counter++; counter >= fakerOpt.MaxGenerateStringRetries {
-				return "", errors.New("Max number of string generation retries exhausted")
+				return "", errors.New("max number of string generation retries exhausted")
 			}
 			randRune = rune(rand.Intn(int(fakerOpt.StringLanguage.End-fakerOpt.StringLanguage.Start)) + int(fakerOpt.StringLanguage.Start))
 			_, ok := set[randRune]

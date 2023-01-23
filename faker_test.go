@@ -2,7 +2,7 @@ package faker
 
 import (
 	"fmt"
-	mathrand "math/rand"
+	mathrand "pgregory.net/rand"
 	"reflect"
 	"strings"
 	"sync"
@@ -1246,7 +1246,7 @@ func TestExtend(t *testing.T) {
 		a := Sample{}
 		sliceLen := 10
 		err := AddProvider("myint", func(v reflect.Value) (interface{}, error) {
-			r1 := mathrand.New(NewSafeSource(mathrand.NewSource(time.Now().UnixNano())))
+			r1 := mathrand.New()
 			r := make([]MyInt, sliceLen)
 			for i := range r {
 				r[i] = MyInt(r1.Intn(100))

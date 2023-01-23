@@ -2,7 +2,7 @@ package faker
 
 import (
 	"io"
-	mathrand "math/rand"
+	mathrand "pgregory.net/rand"
 	"sync"
 )
 
@@ -13,7 +13,7 @@ var (
 
 type safeSource struct {
 	mx sync.Mutex
-	mathrand.Source
+	Source *mathrand.Rand
 }
 
 func (s *safeSource) Int63() int64 {
@@ -25,9 +25,9 @@ func (s *safeSource) Int63() int64 {
 
 // NewSafeSource wraps an unsafe rand.Source with a mutex to guard the random source
 // against concurrent access.
-func NewSafeSource(in mathrand.Source) mathrand.Source {
+func NewSafeSource(in mathrand.Rand) *safeSource {
 	return &safeSource{
-		Source: in,
+		Source: &in,
 	}
 }
 
@@ -37,8 +37,8 @@ func NewSafeSource(in mathrand.Source) mathrand.Source {
 // e.g. SetRandomSource(NewSafeSource(mysource)).
 //
 // The default is the global, concurrent-safe source provided by math/rand.
-func SetRandomSource(in mathrand.Source) {
-	rand = mathrand.New(in)
+func SetRandomSource(in *mathrand.Rand) {
+	rand = in
 }
 
 // SetCryptoSource sets a new reader for functions using a cryptographically-safe random generator (e.g. UUID).
